@@ -17,7 +17,7 @@ fi
 
 if [ $UID -ne 0 ]; then
     echo "käivita root kasutajana"
-    exit 1
+    exit 2
 fi
 
 if [ $(apt-cache policy apache2 | grep "(none)" | wc -l) -eq 1 ]; then
@@ -40,7 +40,7 @@ fi
 if [ -d "/var/www/$SAIT" ]; then
     echo "kaust /var/www/$SAIT on juba olemas"
     echo "ilmselt on sait juba konfitud, exit"
-    exit 2 
+    exit 3 
 else
     echo "teen kausta /var/www/$SAIT"
     mkdir -p "/var/www/$SAIT"
