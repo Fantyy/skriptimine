@@ -5,6 +5,8 @@
 # veebiserveri koos nimelahendusega.
 #
 
+export LC_ALL=C
+
 SAIT=$1
 
 if [ $# -ne 1 ]; then

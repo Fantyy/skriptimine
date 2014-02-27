@@ -7,6 +7,8 @@
 # sheeri kohta vajalikud andmed.
 #
 
+export LC_ALL=C
+
 KAUST=$1
 GRUPP=$2
 
