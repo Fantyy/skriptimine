@@ -1,10 +1,14 @@
 #!/bin/bash
-
+#
+# Gert Vaikre A21
+# Leiab kasutajad, kelle paroolid on etteantud räsialgoritmiga räsitud.
+#
+ 
 if [ $UID -ne 0 ]; then
     echo "käivita root kasutajana"
     exit 2
 fi
-
+ 
 case "$1" in
 'md5')
     HASH=1
@@ -24,10 +28,10 @@ case "$1" in
     exit 1
 ;;
 esac
-
+ 
 KASUTAJAD=$(getent shadow | grep ":\$$HASH" | cut -d":" -f1)
 echo "kasutajad, kelle parooliräsi on $1'ga räsitud:"
-
+ 
 if [[ -z $KASUTAJAD ]]; then
     echo "mitte ühtegi : ("
     exit 3
