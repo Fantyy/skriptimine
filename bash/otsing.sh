@@ -6,7 +6,7 @@
 #
 
 NIMI=$1
-KODU=$(getent passwd $1 | cut -d":" -f6)
+KODU=$(getent passwd $NIMI | cut -d":" -f6)
 
 if [ $# -ne 1 ]; then
     echo "kasutamine: $0 kasutaja-nimi"
