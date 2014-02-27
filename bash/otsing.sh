@@ -15,4 +15,3 @@ if [ $# -ne 1 ]; then
 fi
 
 find / -user $NIMI -not -path "$KODU/*"
-
