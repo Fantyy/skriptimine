@@ -1,10 +1,11 @@
 #!/bin/bash
+#
 # Gert Vaikre A21
 # Kontrollib, kas ntp server lubab kasutada käsku monlist.
-# Et ntpdc -c monlisti järgi väga kaua ootama ei peaks (kontroll toimib alles pärast programmi lõpetamist)
-# kasutatakse timeout funktsiooni, mis tapab protsessi etteantud aja möödudes.
-# Iseenesest saaks selle skriptiga kogu neti läbi skännida (pannes timeout üpris väikseks),
-# kui see kõik loopi panna ja argumentideks IP'de vahemik.
+# Et ntpdc -c monlisti järgi väga kaua ootama ei peaks (kontroll toimib
+# alles pärast ntpdc lõpetamist) kasutatakse timeout funktsiooni, mis
+# tapab protsessi etteantud aja möödudes.
+#
  
 export LC_ALL=C
  
@@ -20,16 +21,21 @@ elif [ $# -eq 0 ]; then
 fi
  
 function timeout {
-    PROGRAMM=$(echo $1 | cut -d" " -f1)
-    $1 &
-    sleep $2
-    if [ $(ps -ef | grep $PROGRAMM | grep -v grep >/dev/null; echo $?) -eq 0 ]; then
-        killall $PROGRAMM 
+    COM=$1
+    TARGET=$(echo $COM | cut -d" " -f1)
+
+    $COM &
+    sleep $TIME
+    if [ $(ps -ef | grep $TARGET | grep -v grep >/dev/null; echo $?) -eq 0 ]; then
+        killall $TARGET 
     fi
 }
- 
-if [ $(timeout "ntpdc -c monlist $IP" "$TIME" 2>/dev/null | grep remote >/dev/null ; echo $?) -eq 0 ]; then
-    echo "ntp server $1 lubab kasutada käsku monlist"
+
+echo "oota natuke... (timeout $TIME)"
+if [ $(timeout "ntpdc -c monlist $IP" 2>/dev/null | grep "remote" >/dev/null ; echo $?) -eq 0 ]; then
+    echo "ntp server $IP lubab kasutada käsku monlist"
+    exit 0
 else
-    echo "ntp server $1 ei luba kasutada käsku monlist"
+    echo "ntp server $IP ei luba kasutada käsku monlist"
+    exit 2
 fi
