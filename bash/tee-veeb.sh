@@ -20,25 +20,24 @@ if [ $UID -ne 0 ]; then
     exit 2
 fi
 
-{ type apache2 &>/dev/null && echo 'apache on paigaldatud'; } ||
+type apache2 &>/dev/null ||
   { echo "uuendan repod/paigaldan apache2"
   apt-get update >/dev/null && apt-get install -y apache2 >/dev/null; }
 
 if [ $(grep "127.0.0.1 $SAIT" /etc/hosts >/dev/null; echo $?) -eq 0 ]; then
-    echo "nimelahendus on juba olemas"
+    echo "nimelahendus on juba olemas - kas sait on juba konfitud?"
 else
     echo "loon nimelahenduse /etc/hosts failis"
     echo "127.0.0.1 $SAIT" >> /etc/hosts
 fi
 
 if [ -d "/var/www/$SAIT" ]; then
-    echo "kaust /var/www/$SAIT on juba olemas"
-    echo "ilmselt on sait juba konfitud, exit"
-    exit 3 
-else
-    echo "teen kausta /var/www/$SAIT"
-    mkdir -p "/var/www/$SAIT"
-fi
+    echo "kaust /var/www/$SAIT on juba olemas. sait on ilmselt juba konfitud."
+    exit 3
+fi 
+
+echo "teen kausta /var/www/$SAIT"
+mkdir -p "/var/www/$SAIT"
 
 echo "kopin template'i kausta"
 sed "s/It works!/$SAIT/" /var/www/index.html > "/var/www/$SAIT/index.html"

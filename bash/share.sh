@@ -26,42 +26,27 @@ if [ $UID -ne 0 ]; then
     exit 2
 fi
 
-{ type smbd &>/dev/null && echo 'samba on paigaldatud'; } ||
+type smbd &>/dev/null ||
   { echo "uuendan repod/paigaldan samba"
   apt-get update >/dev/null && apt-get install -y samba >/dev/null; }
 
-if [ $(getent group $GRUPP &>/dev/null; echo $?) -eq 0 ]; then
-    echo "grupp on olemas"
-else
-    echo "grupp ei ole olemas"
-    echo "teen grupi"
-    groupadd $GRUPP
-fi
+getent group $GRUPP &>/dev/null ||
+  { echo "teen grupi $GRUPP"
+  groupadd $GRUPP; }
 
+[ -d $KAUST ] ||
+  { echo "teen kausta $KAUST"
+  mkdir $KAUST; }
 
-if [ -d $KAUST ]; then
-    echo "kaust on olemas"
-else
-    echo "kaust ei ole olemas"
-    echo "teen kausta"
-    mkdir $KAUST 
-    #if [ $(echo $?) -ne 0 ]; then
-    #    echo "kausta tegemisel tekkis viga"
-    #    exit 3
-    #fi
-    echo "määran kaustale õigused"
-    chgrp $GRUPP $KAUST
-    chmod g+w $KAUST
-fi
+echo "määran kaustale õigused"
+chgrp $GRUPP $KAUST
+chmod g+w $KAUST
 
 if [ $(grep -E "^\[$SHARE\]$" /etc/samba/smb.conf &>/dev/null; echo $?) -eq 0 ]; then
-    echo "sheer on juba olemas, exit"
-    exit 3 
-else
-    echo "sheer ei ole olemas"
+  echo "smb.confis on $SHARE juba olemas, exit"
+  exit 3
 fi
 
-#backup igaks juhuks
 echo "teen smb.conf backupi /etc/samba/smb.conf-backup"
 cp /etc/samba/smb.conf /etc/samba/smb.conf-backup
 
@@ -78,7 +63,7 @@ directory mask = 770
 LOPP
 
 echo "kontrollin smb.conf'i testparmiga"
-if [ $(testparm; echo $?) -eq 1 ]; then
+if [ $(testparm -s &>/dev/null; echo $?) -eq 1 ]; then
     echo "esines viga, taastan smb.confi backupist"
     rm /etc/samba/smb.conf
     mv /etc/samba/smb.conf-backup /etc/samba/smb.conf
