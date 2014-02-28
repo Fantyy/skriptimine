@@ -26,17 +26,9 @@ if [ $UID -ne 0 ]; then
     exit 2
 fi
 
-if [ $(apt-cache policy samba | grep "(none)" | wc -l) -eq 1 ]; then
-    echo "samba ei ole paigaldatud"
-    echo "uuendan repod"
-    apt-get update > /dev/null
-    echo "paigaldan samba"
-    apt-get install -y samba > /dev/null
-#    echo "teen samba sheeride kausta"
-#    mkdir /var/samba
-else
-    echo "samba on paigaldatud"
-fi
+{ type smbd &>/dev/null && echo 'samba on paigaldatud'; } ||
+  { echo "uuendan repod/paigaldan samba"
+  apt-get update >/dev/null && apt-get install -y samba >/dev/null; }
 
 if [ $(getent group $GRUPP &>/dev/null; echo $?) -eq 0 ]; then
     echo "grupp on olemas"

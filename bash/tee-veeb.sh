@@ -20,15 +20,9 @@ if [ $UID -ne 0 ]; then
     exit 2
 fi
 
-if [ $(apt-cache policy apache2 | grep "(none)" | wc -l) -eq 1 ]; then
-    echo "apache2 ei ole paigaldatud"
-    echo "uuendan repod"
-    apt-get update > /dev/null
-    echo "paigaldan apache2"
-    apt-get install -y apache2 > /dev/null
-else
-    echo "apache2 on paigaldatud"
-fi
+{ type apache2 &>/dev/null && echo 'apache on paigaldatud'; } ||
+  { echo "uuendan repod/paigaldan apache2"
+  apt-get update >/dev/null && apt-get install -y apache2 >/dev/null; }
 
 if [ $(grep "127.0.0.1 $SAIT" /etc/hosts >/dev/null; echo $?) -eq 0 ]; then
     echo "nimelahendus on juba olemas"
