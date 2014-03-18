@@ -30,4 +30,14 @@ while True:
     massiiv.append(line)
 ifh.close()
 
-print(max(massiiv, key=len))
+suurim = "" 
+reanr = 0
+
+for x in range(0,len(massiiv)):
+    #print(massiiv[x])
+    if len(suurim) < len(massiiv[x]):
+        suurim = massiiv[x]
+        reanr = x+1
+#print(max(massiiv, key=len))
+print("Kõige pikema rida:")
+print(reanr, suurim)
