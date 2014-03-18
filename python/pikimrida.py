@@ -19,9 +19,8 @@ except IOError:
     sys.exit(2)
 
 massiiv = []
-
-#for line in ifh.readlines():
-#    massiiv.append(line)
+suurim = "" 
+reanr = 0
 
 while True:
     line = ifh.readline()
@@ -30,14 +29,11 @@ while True:
     massiiv.append(line)
 ifh.close()
 
-suurim = "" 
-reanr = 0
-
 for x in range(0,len(massiiv)):
     #print(massiiv[x])
     if len(suurim) < len(massiiv[x]):
         suurim = massiiv[x]
         reanr = x+1
-#print(max(massiiv, key=len))
-print("Kõige pikema rida:")
+
+print("Kõige pikem rida:")
 print(reanr, suurim)
