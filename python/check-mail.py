@@ -31,9 +31,9 @@ while True:
     if not rida:
         break
     andmed = rida.split(' ')
-    user = andmed[0]
-    psw =  andmed[1]
     try:
+        user = andmed[0]
+        psw =  andmed[1]
         server = andmed[2].strip()
     except IndexError:
         print "Viga faili", failinimi, "töötlemisel\n"
