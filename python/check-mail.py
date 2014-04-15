@@ -46,9 +46,11 @@ while True:
         mail.login(user, psw)
         mail.list()
         mail.select("inbox")
-        result, data = mail.search(None, "ALL")
+        #result, data = mail.search(None, "ALL")
+        #võimalik, et (UNSEEN) on gmaili feature ainult?
+        result, data = mail.search(None, "(UNSEEN)")
         meilideID = data[0] 
-        print "Kasutaja", user, "@", server, "meilide nimekiri"
+        print "Kasutaja", user, "@", server, "uute meilide nimekiri"
         print 20*"="
         for number in meilideID.split():
             result, data = mail.fetch(number, "(RFC822)")
