@@ -49,16 +49,16 @@ while True:
         result, data = mail.search(None, "ALL")
         meilideID = data[0] 
         print "Kasutaja", user, "@", server, "meilide nimekiri"
-        print "==================="
+        print 20*"="
         for number in meilideID.split():
             result, data = mail.fetch(number, "(RFC822)")
             raw_email = data[0][1] 
             email_message = email.message_from_string(raw_email)
             print email_message['Subject']
-        print "==================="
+        print 20*"="
     except Exception, e:
         print "Viga kasutaja", user, "meilide töötlemisel"
         print "Veateade:"
         print e 
-        print "==================="
+        print 20*"="
 sisend.close()
