@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-# Võtab sisendist IMAP kasutajanimed, salasõnad ja serveri nime. Logib sisse ja tõmbab meilide nimekirja alla
+#
+# Võtab sisendist IMAP kasutajanimed, salasõnad ja serveri nime. Logib sisse
+# ja tõmbab meilide nimekirja alla.
 #
 # http://yuji.wordpress.com/2011/06/22/python-imaplib-imap-example-with-gmail/
-# http://stackoverflow.com/questions/2983647/how-do-you-iterate-through-each-email-in-your-inbox-using-python
+# http://stackoverflow.com/questions/2983647/how-do-you-iterate-through-each-
+# email-in-your-inbox-using-python
 #
 # Gert Vaikre A21
 #
@@ -47,7 +49,7 @@ while True:
         mail.list()
         mail.select("inbox")
         #result, data = mail.search(None, "ALL")
-        #võimalik, et (UNSEEN) on gmaili feature ainult?
+        # Võimalik, et (UNSEEN) on GMaili feature ainult?
         result, data = mail.search(None, "(UNSEEN)")
         meilideID = data[0] 
         print "Kasutaja", user, "@", server, "uute meilide nimekiri"
@@ -58,6 +60,8 @@ while True:
             email_message = email.message_from_string(raw_email)
             print email_message['Subject']
         print 20*"="
+    # Meilide fetchimisel võib nii palju valesti minna, et lihtsam on catchida
+    # kõik ja anda kasutajale veateade, mis on üpriski lihtsalt loetav.
     except Exception, e:
         print "Viga kasutaja", user, "meilide töötlemisel"
         print "Veateade:"
