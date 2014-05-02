@@ -1,10 +1,11 @@
 #!/bin/bash
 #
-# installs openvpn + configures ip masquerading on a vps
+# installs openvpn + configures ip masquerading on a 32-bit centos 6.5 vps
 #
 
 set -e
 
+#obviously needs root privileges, not even going to bother checking for them
 if [ $# -ne 4 ]; then
     echo "use: $0 client-hostname vpn-subnet dns-server external-ip"
     echo "example:"
@@ -95,4 +96,4 @@ echo "iptables -t nat -A POSTROUTING -j SNAT --to-source $EXTERNAL"
 service openvpn start
 
 echo "all done."
-echo "clients need ca.crt/client.crt/client.key"
+echo "client needs ca.crt/$CLIENT.crt/$CLIENT.key (located in /etc/openvpn/keys)"
